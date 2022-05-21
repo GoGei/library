@@ -36,6 +36,12 @@ INSTALLED_APPS = [
     'ckeditor_uploader',
     'core.Utils',
     'core.User',
+    'core.Author',
+    'core.Category',
+    'core.Book',
+    'core.Like',
+    'core.Favourite',
+    'core.Profile',
 ]
 
 AUTH_USER_MODEL = 'User.User'
