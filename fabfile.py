@@ -73,7 +73,7 @@ def deploy_local(branch=None):
 def check():
     local('python manage.py test')
     local('python manage.py check')
-    local('time flake8 ./core ./Blog')
+    local('time flake8 ./core ./Api ./Admin')
 
 
 @task
