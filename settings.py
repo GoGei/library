@@ -25,21 +25,23 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django_hosts',
-    'django_filters',
     'django_extensions',
+    # 'django_hosts',
+    'django_filters',
     'widget_tweaks',
     'corsheaders',
     'rest_framework',
     'drf_yasg2',
     'ckeditor',
     'ckeditor_uploader',
+    'core.Utils',
+    'core.User',
 ]
 
 AUTH_USER_MODEL = 'User.User'
 
 MIDDLEWARE = [
-    'django_hosts.middleware.HostsRequestMiddleware',
+    # 'django_hosts.middleware.HostsRequestMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -47,7 +49,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django_hosts.middleware.HostsResponseMiddleware',
+    # 'django_hosts.middleware.HostsResponseMiddleware',
 ]
 
 CORS_ALLOW_ALL_ORIGINS = True
@@ -154,7 +156,7 @@ CKEDITOR_CONFIGS = {
     'default': {
         'toolbar': 'full',
     },
-    'profile': {
+    'admin': {
         'toolbar': [
             ['Undo', 'Redo',
              '-', 'Bold', 'Italic', 'Underline',
