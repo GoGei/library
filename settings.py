@@ -26,7 +26,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_extensions',
-    # 'django_hosts',
+    'django_hosts',
     'django_filters',
     'widget_tweaks',
     'corsheaders',
@@ -41,7 +41,7 @@ INSTALLED_APPS = [
 AUTH_USER_MODEL = 'User.User'
 
 MIDDLEWARE = [
-    # 'django_hosts.middleware.HostsRequestMiddleware',
+    'django_hosts.middleware.HostsRequestMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -49,7 +49,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    # 'django_hosts.middleware.HostsResponseMiddleware',
+    'django_hosts.middleware.HostsResponseMiddleware',
 ]
 
 CORS_ALLOW_ALL_ORIGINS = True
@@ -68,9 +68,9 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            # BASE_DIR + 'core/templates/',
-            # BASE_DIR + 'Public/templates/',
-            # BASE_DIR + 'Admin/templates/',
+            BASE_DIR + 'core/templates/',
+            BASE_DIR + 'Public/templates/',
+            BASE_DIR + 'Admin/templates/',
         ],
         'APP_DIRS': True,
         'OPTIONS': {
