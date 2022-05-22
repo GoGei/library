@@ -2,7 +2,7 @@ from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from Api.v1.filters import BaseCrmFilter
+from Api.filters import BaseCrmFilter
 from core.Category.models import Category
 from .serializers import CategorySerializer
 
