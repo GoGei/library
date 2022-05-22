@@ -53,3 +53,13 @@ class User(CrmMixin, AbstractBaseUser):
     @property
     def label(self):
         return self.email or self.id
+
+    def archive(self, archived_by=None):
+        super(User, self).archive(archived_by)
+        self.is_active = False
+        self.save()
+
+    def restore(self, restored_by=None):
+        super(User, self).restore(restored_by)
+        self.is_active = True
+        self.save()
