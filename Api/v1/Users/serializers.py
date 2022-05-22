@@ -6,6 +6,7 @@ from core.Utils.validators import PasswordValidator
 class UserListSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
+        fields = '__all__'
         exclude = ['password']
 
 

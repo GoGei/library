@@ -2,9 +2,8 @@ from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from .serializers import UserSerializer, UserListSerializer, UserCreateUpdateSerializer, UserSetPasswordSerializer
-
 from core.User.models import User
+from .serializers import UserSerializer, UserListSerializer, UserCreateUpdateSerializer, UserSetPasswordSerializer
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -16,6 +15,9 @@ class UserViewSet(viewsets.ModelViewSet):
         'update': UserCreateUpdateSerializer,
         'set_password': UserSetPasswordSerializer,
     }
+    ordering_fields = ['email']
+    search_fields = ['email']
+    filterset_fields = ['is_active', 'is_staff', 'is_superuser']
 
     def get_serializer_class(self):
         return self.serializer_map.get(self.action, self.serializer_class)
@@ -25,6 +27,8 @@ class UserViewSet(viewsets.ModelViewSet):
         obj = self.get_object()
         user = request.user
         obj.archive(user)
+        # obj.is_active = False
+        # obj.save()
 
         profiles = obj.profile_set.all()
         profiles.archive(user)
@@ -35,6 +39,8 @@ class UserViewSet(viewsets.ModelViewSet):
         obj = self.get_object()
         user = request.user
         obj.restore(user)
+        # obj.is_active = True
+        # obj.save()
 
         profiles = obj.profile_set.all()
         profiles.restore(user)

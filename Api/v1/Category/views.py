@@ -2,20 +2,23 @@ from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
+from Api.v1.filters import BaseCrmFilter
 from core.Category.models import Category
-from .serializers import CategorySerializer, CategoryCreateUpdateSerializer
+from .serializers import CategorySerializer
+
+
+class CategoryFilter(BaseCrmFilter):
+    class Meta:
+        model = Category
+        fields = ['is_active']
 
 
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
-    serializer_map = {
-        'create': CategoryCreateUpdateSerializer,
-        'update': CategoryCreateUpdateSerializer,
-    }
-
-    def get_serializer_class(self):
-        return self.serializer_map.get(self.action, self.serializer_class)
+    ordering_fields = ['name']
+    search_fields = ['name', 'slug']
+    filterset_class = CategoryFilter
 
     @action(detail=True, methods=['post'])
     def archive(self, request, pk=None):

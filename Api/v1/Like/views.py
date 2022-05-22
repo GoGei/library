@@ -11,6 +11,9 @@ class LikeViewSet(viewsets.ModelViewSet):
         'list': LikeViewSerializer,
         'retrieve': LikeViewSerializer,
     }
+    ordering_fields = []
+    search_fields = ['user__email', 'book__name']
+    filterset_fields = ['is_liked']
 
     def get_serializer_class(self):
         return self.serializer_map.get(self.action, self.serializer_class)

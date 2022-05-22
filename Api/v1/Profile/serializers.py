@@ -22,7 +22,7 @@ class ProfileCreateUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
         fields = ['id', 'user']
-        read_only = ['id']
+        read_only_fields = ['id']
 
 
 class ProfileDetailSerializer(serializers.ModelSerializer):
@@ -31,7 +31,7 @@ class ProfileDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
         fields = ['id', 'user']
-        read_only = ['id', 'user']
+        read_only_fields = ['id', 'user']
 
 
 class ProfileCreateWithUser(serializers.Serializer):

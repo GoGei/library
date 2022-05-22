@@ -8,9 +8,9 @@ from Api.v1.Users.views import UserViewSet
 from Api.v1.Profile.views import ProfileViewSet
 
 router_v1 = routers.DefaultRouter()
-router_v1.register(r'author', AuthorViewSet, basename='author')
-router_v1.register(r'book', BookViewSet, basename='book')
-router_v1.register(r'category', CategoryViewSet, basename='category')
+router_v1.register(r'authors', AuthorViewSet, basename='authors')
+router_v1.register(r'books', BookViewSet, basename='books')
+router_v1.register(r'categories', CategoryViewSet, basename='categories')
 router_v1.register(r'favourite', FavouriteViewSet, basename='favourite')
 router_v1.register(r'like', LikeViewSet, basename='like')
 router_v1.register(r'users', UserViewSet, basename='users')
