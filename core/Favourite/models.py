@@ -3,7 +3,10 @@ from django.db import models
 
 class FavouriteQuerySet(models.QuerySet):
     def favourites(self, user):
-        return self.select_related('user', 'book').filter(user=user).all()
+        if user:
+            return self.select_related('user', 'book').filter(user=user).all()
+        else:
+            return self
 
 
 class Favourite(models.Model):
@@ -20,6 +23,6 @@ class Favourite(models.Model):
         self.is_favourite = True
         self.save()
 
-    def deactivate(self):
+    def unfavourite(self):
         self.is_favourite = False
         self.save()

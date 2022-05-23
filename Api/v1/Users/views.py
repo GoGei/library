@@ -10,7 +10,7 @@ from .serializers import UserSerializer, UserListSerializer, UserCreateUpdateSer
 class UserViewSet(viewsets.ModelViewSet):
     permission_classes = [IsSuperuserPermission]
 
-    queryset = User.objects.prefetch_related('profile_set').all()
+    queryset = User.objects.prefetch_related('profile_set', 'like_set', 'favourite_set').all()
     serializer_class = UserSerializer
     serializer_map = {
         'list': UserListSerializer,

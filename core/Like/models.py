@@ -3,10 +3,16 @@ from django.db import models
 
 class LikeQuerySet(models.QuerySet):
     def liked(self, user):
-        return self.select_related('user', 'book').filter(user=user, is_liked=True).all()
+        if user:
+            return self.select_related('user', 'book').filter(user=user, is_liked=True).all()
+        else:
+            return self
 
     def disliked(self, user):
-        return self.select_related('user', 'book').filter(user=user, is_liked=False).all()
+        if user:
+            return self.select_related('user', 'book').filter(user=user, is_liked=False).all()
+        else:
+            return self
 
 
 class Like(models.Model):

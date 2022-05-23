@@ -12,7 +12,7 @@ from .serializers import ProfileSerializer, ProfileListSerializer, ProfileCreate
 class ProfileFilter(BaseCrmFilter):
     class Meta:
         model = Profile
-        fields = ['is_active']
+        fields = ['is_active', 'is_banned']
 
 
 class ProfileViewSet(viewsets.ModelViewSet):
