@@ -33,7 +33,7 @@ class UserManager(BaseUserManager):
         return self._create_user(email, password, **extra_fields)
 
 
-class User(CrmMixin, AbstractBaseUser):
+class User(AbstractBaseUser):
     email = models.EmailField(verbose_name='email address', max_length=255, unique=True, db_index=True, null=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
@@ -54,12 +54,10 @@ class User(CrmMixin, AbstractBaseUser):
     def label(self):
         return self.email or self.id
 
-    def archive(self, archived_by=None):
-        super(User, self).archive(archived_by)
+    def archive(self):
         self.is_active = False
         self.save()
 
-    def restore(self, restored_by=None):
-        super(User, self).restore(restored_by)
+    def restore(self):
         self.is_active = True
         self.save()
