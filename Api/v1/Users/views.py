@@ -3,6 +3,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from Api.permissions import IsSuperuserPermission
+from Api.serializers import EmptySerializer
 from core.User.models import User
 from .serializers import UserSerializer, UserListSerializer, UserCreateUpdateSerializer, UserSetPasswordSerializer
 
@@ -18,11 +19,14 @@ class UserViewSet(viewsets.ModelViewSet):
         'update': UserCreateUpdateSerializer,
         'set_password': UserSetPasswordSerializer,
     }
+    empty_serializer_set = {'archive', 'restore'}
     ordering_fields = ['email']
     search_fields = ['email']
     filterset_fields = ['is_active', 'is_staff', 'is_superuser']
 
     def get_serializer_class(self):
+        if self.action in self.empty_serializer_set:
+            return EmptySerializer
         return self.serializer_map.get(self.action, self.serializer_class)
 
     @action(detail=True, methods=['post'])

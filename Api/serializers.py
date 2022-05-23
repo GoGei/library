@@ -3,6 +3,11 @@ from rest_framework import serializers
 STAMP_FORMAT = '%d %b %Y'
 
 
+class EmptySerializer(serializers.Serializer):
+    # created for actions that not require body
+    pass
+
+
 class BaseCreateUpdateSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         instance = super(BaseCreateUpdateSerializer, self).create(validated_data)

@@ -5,6 +5,7 @@ from rest_framework.renderers import AdminRenderer
 
 from Api.permissions import IsStaffPermission
 from Api.filters import BaseCrmFilter
+from Api.serializers import EmptySerializer
 from core.Category.models import Category
 from .serializers import CategorySerializer, CategoryListSerializer, CategoryRetrieveSerializer
 
@@ -25,11 +26,14 @@ class CategoryViewSet(viewsets.ModelViewSet):
         'list': CategoryListSerializer,
         'retrieve': CategoryRetrieveSerializer,
     }
+    empty_serializer_set = {'archive', 'restore'}
     ordering_fields = ['name']
     search_fields = ['name', 'slug']
     filterset_class = CategoryFilter
 
     def get_serializer_class(self):
+        if self.action in self.empty_serializer_set:
+            return EmptySerializer
         return self.serializer_map.get(self.action, self.serializer_class)
 
     @action(detail=True, methods=['post'])

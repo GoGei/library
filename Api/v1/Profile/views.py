@@ -4,6 +4,7 @@ from rest_framework.response import Response
 
 from Api.permissions import IsSuperuserPermission
 from Api.filters import BaseCrmFilter
+from Api.serializers import EmptySerializer
 from core.Profile.models import Profile
 from core.User.models import User
 from .serializers import ProfileSerializer, ProfileListSerializer, ProfileCreateWithUser, ProfileDetailSerializer
@@ -25,12 +26,14 @@ class ProfileViewSet(viewsets.ModelViewSet):
         'retrieve': ProfileDetailSerializer,
         'create_with_user': ProfileCreateWithUser,
     }
-
+    empty_serializer_set = {'archive', 'restore'}
     ordering_fields = []
     search_fields = ['user__email']
     filterset_class = ProfileFilter
 
     def get_serializer_class(self):
+        if self.action in self.empty_serializer_set:
+            return EmptySerializer
         return self.serializer_map.get(self.action, self.serializer_class)
 
     @action(detail=False, methods=['post'], url_path='create-with-user')

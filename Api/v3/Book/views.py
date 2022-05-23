@@ -5,6 +5,7 @@ from rest_framework.renderers import AdminRenderer
 
 from Api.permissions import IsStaffPermission
 from Api.filters import BaseCrmFilter
+from Api.serializers import EmptySerializer
 from core.Book.models import Book
 from .serializers import BookSerializer, BookListSerializer, BookRetrieveSerializer, BookCreateUpdateSerializer
 
@@ -27,11 +28,14 @@ class BookViewSet(viewsets.ModelViewSet):
         'create': BookCreateUpdateSerializer,
         'update': BookCreateUpdateSerializer,
     }
+    empty_serializer_set = {'archive', 'restore'}
     ordering_fields = ['publish_date']
     search_fields = ['name', 'author__name']
     filterset_class = BookFilter
 
     def get_serializer_class(self):
+        if self.action in self.empty_serializer_set:
+            return EmptySerializer
         return self.serializer_map.get(self.action, self.serializer_class)
 
     @action(detail=True, methods=['post'])
