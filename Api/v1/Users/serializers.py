@@ -1,25 +1,20 @@
 from rest_framework import serializers
 from core.User.models import User
 from core.Utils.validators import PasswordValidator
+from Api.v1.serializers import BaseCreateUpdateSerializer
 
 
 class UserListSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = '__all__'
         exclude = ['password']
 
 
-class UserCreateUpdateSerializer(serializers.ModelSerializer):
+class UserCreateUpdateSerializer(BaseCreateUpdateSerializer):
     class Meta:
         model = User
         fields = ['id', 'email', 'is_active', 'is_staff', 'is_superuser']
         read_only_fields = ['id']
-
-    def update(self, instance, validated_data):
-        instance = super(UserCreateUpdateSerializer, self).update(instance, validated_data)
-        instance.modify(self.context['request'].user)
-        return instance
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -41,3 +36,9 @@ class UserSetPasswordSerializer(serializers.Serializer):
         if data['password'] != data['repeat_password']:
             raise serializers.ValidationError('Password mismatch!')
         return data
+
+
+class UserCrmSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'email']

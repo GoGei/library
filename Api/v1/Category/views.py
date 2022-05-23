@@ -2,9 +2,9 @@ from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from Api.filters import BaseCrmFilter
+from Api.v1.filters import BaseCrmFilter
 from core.Category.models import Category
-from .serializers import CategorySerializer
+from .serializers import CategorySerializer, CategoryViewSerializer
 
 
 class CategoryFilter(BaseCrmFilter):
@@ -16,9 +16,16 @@ class CategoryFilter(BaseCrmFilter):
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
+    serializer_map = {
+        'list': CategoryViewSerializer,
+        'retrieve': CategoryViewSerializer,
+    }
     ordering_fields = ['name']
     search_fields = ['name', 'slug']
     filterset_class = CategoryFilter
+
+    def get_serializer_class(self):
+        return self.serializer_map.get(self.action, self.serializer_class)
 
     @action(detail=True, methods=['post'])
     def archive(self, request, pk=None):

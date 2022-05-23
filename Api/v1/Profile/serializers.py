@@ -1,24 +1,22 @@
 from rest_framework import serializers
-from Api.v1.Users.serializers import UserSerializer
+from Api.v1.Users.serializers import UserSerializer, UserCrmSerializer
+from Api.v1.serializers import BaseCreateUpdateSerializer
 from core.Profile.models import Profile
 from core.User.models import User
 
 
-class ProfileSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Profile
-        fields = ['id', 'user']
-
-
 class ProfileListSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)
+    created_by = UserCrmSerializer()
+    modified_by = UserCrmSerializer()
+    archived_by = UserCrmSerializer()
 
     class Meta:
         model = Profile
         fields = '__all__'
 
 
-class ProfileCreateUpdateSerializer(serializers.ModelSerializer):
+class ProfileSerializer(BaseCreateUpdateSerializer):
     class Meta:
         model = Profile
         fields = ['id', 'user']
@@ -31,7 +29,6 @@ class ProfileDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
         fields = ['id', 'user']
-        read_only_fields = ['id', 'user']
 
 
 class ProfileCreateWithUser(serializers.Serializer):

@@ -1,8 +1,10 @@
 from rest_framework import serializers
 from core.Category.models import Category
+from Api.v1.Users.serializers import UserCrmSerializer
+from Api.v1.serializers import BaseCreateUpdateSerializer
 
 
-class CategorySerializer(serializers.ModelSerializer):
+class CategorySerializer(BaseCreateUpdateSerializer):
     class Meta:
         model = Category
         fields = ['id', 'name', 'slug', 'label', 'is_active']
@@ -23,3 +25,13 @@ class CategorySerializer(serializers.ModelSerializer):
         instance = super(CategorySerializer, self).update(instance, validated_data)
         instance.assign_slug()
         return instance
+
+
+class CategoryViewSerializer(serializers.ModelSerializer):
+    created_by = UserCrmSerializer()
+    modified_by = UserCrmSerializer()
+    archived_by = UserCrmSerializer()
+
+    class Meta:
+        model = Category
+        fields = '__all__'

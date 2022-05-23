@@ -2,7 +2,7 @@ from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from Api.filters import BaseCrmFilter
+from Api.v1.filters import BaseCrmFilter
 from core.Book.models import Book
 from .serializers import BookSerializer, BookViewSerializer
 

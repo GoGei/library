@@ -4,8 +4,8 @@ from rest_framework.response import Response
 
 from core.Profile.models import Profile
 from core.User.models import User
-from Api.filters import BaseCrmFilter
-from .serializers import ProfileSerializer, ProfileListSerializer, ProfileCreateUpdateSerializer, \
+from Api.v1.filters import BaseCrmFilter
+from .serializers import ProfileSerializer, ProfileListSerializer, \
     ProfileCreateWithUser, ProfileDetailSerializer
 
 
@@ -20,8 +20,6 @@ class ProfileViewSet(viewsets.ModelViewSet):
     serializer_class = ProfileSerializer
     serializer_map = {
         'list': ProfileListSerializer,
-        'create': ProfileCreateUpdateSerializer,
-        'update': ProfileCreateUpdateSerializer,
         'retrieve': ProfileDetailSerializer,
         'create_with_user': ProfileCreateWithUser,
     }

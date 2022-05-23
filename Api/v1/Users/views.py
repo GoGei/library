@@ -27,8 +27,6 @@ class UserViewSet(viewsets.ModelViewSet):
         obj = self.get_object()
         user = request.user
         obj.archive(user)
-        # obj.is_active = False
-        # obj.save()
 
         profiles = obj.profile_set.all()
         profiles.archive(user)
@@ -39,8 +37,6 @@ class UserViewSet(viewsets.ModelViewSet):
         obj = self.get_object()
         user = request.user
         obj.restore(user)
-        # obj.is_active = True
-        # obj.save()
 
         profiles = obj.profile_set.all()
         profiles.restore(user)

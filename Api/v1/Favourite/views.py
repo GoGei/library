@@ -13,7 +13,7 @@ class FavouriteViewSet(viewsets.ModelViewSet):
     }
     ordering_fields = []
     search_fields = ['user__email', 'book__name']
-    filterset_fields = ['is_liked']
+    filterset_fields = ['is_favourite']
 
     def get_serializer_class(self):
         return self.serializer_map.get(self.action, self.serializer_class)
