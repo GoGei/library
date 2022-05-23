@@ -1,31 +1,33 @@
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from rest_framework.renderers import AdminRenderer
 
-from Api.permissions import IsSuperuserPermission
+from Api.permissions import IsStaffPermission
 from Api.filters import BaseCrmFilter
-from core.Author.models import Author
-from .serializers import AuthorSerializer, AuthorViewSerializer
+from core.Category.models import Category
+from .serializers import CategorySerializer, CategoryListSerializer, CategoryRetrieveSerializer
 
 
-class AuthorFilter(BaseCrmFilter):
+class CategoryFilter(BaseCrmFilter):
     class Meta:
-        model = Author
+        model = Category
         fields = ['is_active']
 
 
-class AuthorViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsSuperuserPermission]
+class CategoryViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsStaffPermission]
+    renderer_classes = [AdminRenderer]
 
-    queryset = Author.objects.all().ordered()
-    serializer_class = AuthorSerializer
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
     serializer_map = {
-        'list': AuthorViewSerializer,
-        'retrieve': AuthorViewSerializer,
+        'list': CategoryListSerializer,
+        'retrieve': CategoryRetrieveSerializer,
     }
-    ordering_fields = ['first_name', 'last_name']
-    search_fields = ['first_name', 'last_name', 'middle_name']
-    filterset_class = AuthorFilter
+    ordering_fields = ['name']
+    search_fields = ['name', 'slug']
+    filterset_class = CategoryFilter
 
     def get_serializer_class(self):
         return self.serializer_map.get(self.action, self.serializer_class)

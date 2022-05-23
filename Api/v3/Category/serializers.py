@@ -1,7 +1,6 @@
 from rest_framework import serializers
 from core.Category.models import Category
-from Api.v1.Users.serializers import UserCrmSerializer
-from Api.serializers import BaseCreateUpdateSerializer
+from Api.serializers import BaseCreateUpdateSerializer, BaseCrmSerializer, BaseUrlObjectSerializer
 
 
 class CategorySerializer(BaseCreateUpdateSerializer):
@@ -27,11 +26,13 @@ class CategorySerializer(BaseCreateUpdateSerializer):
         return instance
 
 
-class CategoryViewSerializer(serializers.ModelSerializer):
-    created_by = UserCrmSerializer()
-    modified_by = UserCrmSerializer()
-    archived_by = UserCrmSerializer()
+class CategoryListSerializer(BaseUrlObjectSerializer):
+    class Meta:
+        model = Category
+        fields = ['id', 'name', 'slug', 'is_active', 'url']
 
+
+class CategoryRetrieveSerializer(BaseCrmSerializer):
     class Meta:
         model = Category
         fields = '__all__'

@@ -3,7 +3,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from Api.permissions import IsSuperuserPermission
-from Api.v1.filters import BaseCrmFilter
+from Api.filters import BaseCrmFilter
 from core.Profile.models import Profile
 from core.User.models import User
 from .serializers import ProfileSerializer, ProfileListSerializer, ProfileCreateWithUser, ProfileDetailSerializer

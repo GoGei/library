@@ -17,6 +17,3 @@ router.register(r'users', UserViewSet, basename='users')
 router.register(r'profile', ProfileViewSet, basename='profile')
 
 urlpatterns = router.urls
-urlpatterns += [
-
-]

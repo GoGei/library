@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from core.User.models import User
 from core.Utils.validators import PasswordValidator
-from Api.v1.serializers import BaseCreateUpdateSerializer
+from Api.serializers import BaseCreateUpdateSerializer
 
 
 class UserListSerializer(serializers.ModelSerializer):

@@ -4,11 +4,11 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from Api.permissions import IsSuperuserPermission
-from Api.v1.filters import BaseCrmFilter
+from Api.filters import BaseCrmFilter
 from core.Book.models import Book
 from core.Like.models import Like
 from core.Favourite.models import Favourite
-from .serializers import BookSerializer, BookViewSerializer
+from .serializers import BookSerializer, BookViewSerializer, BookCreateUpdateSerializer
 
 
 class BookFilter(BaseCrmFilter):
@@ -25,6 +25,8 @@ class BookViewSet(viewsets.ModelViewSet):
     serializer_map = {
         'list': BookViewSerializer,
         'retrieve': BookViewSerializer,
+        'create': BookCreateUpdateSerializer,
+        'update': BookCreateUpdateSerializer,
     }
     ordering_fields = ['publish_date']
     search_fields = ['name', 'author__name']

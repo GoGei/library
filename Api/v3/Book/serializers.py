@@ -1,9 +1,6 @@
 from rest_framework import serializers
 from core.Book.models import Book
-from Api.v1.Category.serializers import CategorySerializer
-from Api.v1.Author.serializers import AuthorSerializer
-from Api.v1.Users.serializers import UserCrmSerializer
-from Api.serializers import BaseCreateUpdateSerializer, STAMP_FORMAT
+from Api.serializers import BaseCreateUpdateSerializer, BaseCrmSerializer, BaseUrlObjectSerializer, STAMP_FORMAT
 
 
 class BookSerializer(serializers.ModelSerializer):
@@ -38,35 +35,19 @@ class BookCreateUpdateSerializer(BaseCreateUpdateSerializer):
         return instance
 
 
-class BaseBookSerializer(serializers.ModelSerializer):
+class BookBaseSerializer(serializers.ModelSerializer):
     publish_date = serializers.DateField(format=STAMP_FORMAT)
-    category = CategorySerializer(many=True)
-    author = AuthorSerializer()
+    category = serializers.StringRelatedField(many=True)
+    author = serializers.StringRelatedField()
 
 
-class BookViewSerializer(BaseBookSerializer):
-    created_by = UserCrmSerializer()
-    modified_by = UserCrmSerializer()
-    archived_by = UserCrmSerializer()
+class BookListSerializer(BaseUrlObjectSerializer, BookBaseSerializer):
+    class Meta:
+        model = Book
+        fields = ['id', 'name', 'category', 'author', 'publish_date', 'is_active', 'url']
 
-    is_liked = serializers.NullBooleanField()
-    is_favourite = serializers.BooleanField()
 
+class BookRetrieveSerializer(BaseCrmSerializer, BookBaseSerializer):
     class Meta:
         model = Book
         fields = '__all__'
-        extra_fields = ['is_liked', 'is_favourite']
-
-    def get_field_names(self, declared_fields, info):
-        expanded_fields = super(BookViewSerializer, self).get_field_names(declared_fields, info)
-
-        if getattr(self.Meta, 'extra_fields', None):
-            return expanded_fields + self.Meta.extra_fields
-        else:
-            return expanded_fields
-
-
-class BookRelatedObjectsSerializer(BaseBookSerializer):
-    class Meta:
-        model = Book
-        fields = ['id', 'name', 'category', 'author', 'publish_date']

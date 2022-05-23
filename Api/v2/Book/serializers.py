@@ -13,4 +13,3 @@ class BookSerializer(serializers.ModelSerializer):
     class Meta:
         model = Book
         fields = ['id', 'name', 'slug', 'description', 'category', 'author', 'publish_date', 'is_liked', 'is_favourite']
-        ref_name = 'Book for users (v2)'

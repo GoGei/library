@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from core.Author.models import Author
 from Api.v1.Users.serializers import UserCrmSerializer
-from Api.v1.serializers import BaseCreateUpdateSerializer
+from Api.serializers import BaseCreateUpdateSerializer
 
 
 class AuthorSerializer(BaseCreateUpdateSerializer):

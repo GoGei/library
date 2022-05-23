@@ -4,6 +4,7 @@ from rest_framework import permissions
 
 from Api.v1.routers import router as router_v1
 from Api.v2.routers import router as router_v2
+from Api.v3.routers import router as router_v3
 
 from drf_yasg2.views import get_schema_view
 from drf_yasg2 import openapi
@@ -15,7 +16,7 @@ if settings.HOST_PORT:
 
 schema_view_v1 = get_schema_view(
     openapi.Info(
-        title="Library API",
+        title="Superuser API",
         default_version='v1',
         description='Description',
     ),
@@ -27,12 +28,24 @@ schema_view_v1 = get_schema_view(
 
 schema_view_v2 = get_schema_view(
     openapi.Info(
-        title="Library API",
+        title="User API",
         default_version='v1',
         description='Description',
     ),
     url=api_url,
     patterns=[url(r'^v2/', include((router_v2.urls, 'Api'), namespace='api-v2'))],
+    public=True,
+    permission_classes=(permissions.AllowAny,),
+)
+
+schema_view_v3 = get_schema_view(
+    openapi.Info(
+        title="Staff API",
+        default_version='v1',
+        description='Description',
+    ),
+    url=api_url,
+    patterns=[url(r'^v3/', include((router_v3.urls, 'Api'), namespace='api-v3'))],
     public=True,
     permission_classes=(permissions.AllowAny,),
 )

@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from Api.v1.Users.serializers import UserSerializer, UserCrmSerializer
-from Api.v1.serializers import BaseCreateUpdateSerializer
+from Api.serializers import BaseCreateUpdateSerializer
 from core.Profile.models import Profile
 from core.User.models import User
 
