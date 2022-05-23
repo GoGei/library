@@ -2,6 +2,7 @@ from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
+from Api.permissions import IsSuperuserPermission
 from Api.v1.filters import BaseCrmFilter
 from core.Book.models import Book
 from .serializers import BookSerializer, BookViewSerializer
@@ -14,6 +15,8 @@ class BookFilter(BaseCrmFilter):
 
 
 class BookViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsSuperuserPermission]
+
     queryset = Book.objects.select_related('author').prefetch_related('category').all()
     serializer_class = BookSerializer
     serializer_map = {

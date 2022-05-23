@@ -2,6 +2,7 @@ from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
+from Api.permissions import IsSuperuserPermission
 from Api.v1.filters import BaseCrmFilter
 from core.Category.models import Category
 from .serializers import CategorySerializer, CategoryViewSerializer
@@ -14,6 +15,8 @@ class CategoryFilter(BaseCrmFilter):
 
 
 class CategoryViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsSuperuserPermission]
+
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
     serializer_map = {

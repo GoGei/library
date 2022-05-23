@@ -1,10 +1,13 @@
 from rest_framework import viewsets
 
-from .serializers import FavouriteSerializer, FavouriteViewSerializer
+from Api.permissions import IsSuperuserPermission
 from core.Favourite.models import Favourite
+from .serializers import FavouriteSerializer, FavouriteViewSerializer
 
 
 class FavouriteViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsSuperuserPermission]
+
     queryset = Favourite.objects.select_related('user', 'book').all()
     serializer_class = FavouriteSerializer
     serializer_map = {

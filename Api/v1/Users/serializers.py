@@ -24,16 +24,21 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class UserSetPasswordSerializer(serializers.Serializer):
-    password = serializers.CharField(min_length=8, max_length=32, required=True, write_only=True,
-                                     style={'input_type': 'password'}, validators=[PasswordValidator])
-    repeat_password = serializers.CharField(min_length=8, max_length=32, required=True, write_only=True,
-                                            style={'input_type': 'password'}, validators=[PasswordValidator])
+    disable_complex_password = serializers.BooleanField(required=False, default=False)
+    password = serializers.CharField(min_length=8, max_length=32, required=True, write_only=True)
+    repeat_password = serializers.CharField(min_length=8, max_length=32, required=True, write_only=True)
 
     class Meta:
-        fields = ['password', 'repeat_password']
+        fields = ['password', 'repeat_password', 'disable_complex_password']
 
     def validate(self, data):
-        if data['password'] != data['repeat_password']:
+        password = data['password']
+        repeat_password = data['repeat_password']
+        if not data['disable_complex_password']:
+            PasswordValidator(password)
+            PasswordValidator(repeat_password)
+
+        if password != repeat_password:
             raise serializers.ValidationError('Password mismatch!')
         return data
 

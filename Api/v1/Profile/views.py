@@ -2,11 +2,11 @@ from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
+from Api.permissions import IsSuperuserPermission
+from Api.v1.filters import BaseCrmFilter
 from core.Profile.models import Profile
 from core.User.models import User
-from Api.v1.filters import BaseCrmFilter
-from .serializers import ProfileSerializer, ProfileListSerializer, \
-    ProfileCreateWithUser, ProfileDetailSerializer
+from .serializers import ProfileSerializer, ProfileListSerializer, ProfileCreateWithUser, ProfileDetailSerializer
 
 
 class ProfileFilter(BaseCrmFilter):
@@ -16,6 +16,8 @@ class ProfileFilter(BaseCrmFilter):
 
 
 class ProfileViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsSuperuserPermission]
+
     queryset = Profile.objects.select_related('user').all()
     serializer_class = ProfileSerializer
     serializer_map = {

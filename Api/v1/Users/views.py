@@ -2,11 +2,14 @@ from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
+from Api.permissions import IsSuperuserPermission
 from core.User.models import User
 from .serializers import UserSerializer, UserListSerializer, UserCreateUpdateSerializer, UserSetPasswordSerializer
 
 
 class UserViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsSuperuserPermission]
+
     queryset = User.objects.prefetch_related('profile_set').all()
     serializer_class = UserSerializer
     serializer_map = {

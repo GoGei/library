@@ -2,6 +2,7 @@ from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
+from Api.permissions import IsSuperuserPermission
 from Api.v1.filters import BaseCrmFilter
 from core.Author.models import Author
 from .serializers import AuthorSerializer, AuthorViewSerializer
@@ -14,6 +15,8 @@ class AuthorFilter(BaseCrmFilter):
 
 
 class AuthorViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsSuperuserPermission]
+
     queryset = Author.objects.all().ordered()
     serializer_class = AuthorSerializer
     serializer_map = {
