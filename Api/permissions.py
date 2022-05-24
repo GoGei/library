@@ -14,4 +14,4 @@ class IsStaffPermission(permissions.BasePermission):
 
     def has_permission(self, request, view):
         user = request.user
-        return user.is_active and (user.staff or user.is_superuser)
+        return user.is_active and (user.is_staff or user.is_superuser)

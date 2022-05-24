@@ -13,14 +13,14 @@ class UserListSerializer(serializers.ModelSerializer):
 class UserCreateUpdateSerializer(BaseCreateUpdateSerializer):
     class Meta:
         model = User
-        fields = ['id', 'email', 'is_active', 'is_staff', 'is_superuser']
+        fields = ['id', 'email', 'is_active', 'is_staff', 'is_superuser', 'first_name', 'last_name', 'middle_name']
         read_only_fields = ['id']
 
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'email', 'is_active', 'is_staff', 'is_superuser']
+        fields = ['id', 'email', 'is_active', 'is_staff', 'is_superuser', 'first_name', 'last_name', 'middle_name']
 
 
 class UserSetPasswordSerializer(serializers.Serializer):
