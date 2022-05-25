@@ -47,7 +47,7 @@ class BookViewSet(viewsets.ModelViewSet):
                             (user.id,)))  # noqa
         qs = qs.annotate(
             is_favourite=RawSQL('select is_favourite from "favourite" where book_id=book.id and user_id=%s',
-                            (user.id,)))  # noqa
+                                (user.id,)))  # noqa
         return qs
 
     @action(detail=True, methods=['post'])
@@ -55,14 +55,18 @@ class BookViewSet(viewsets.ModelViewSet):
         obj = self.get_object()
         user = request.user
         obj.archive(user)
-        return Response(status=status.HTTP_200_OK)
+
+        data = self.serializer_class(obj).data
+        return Response({'book': data}, status=status.HTTP_200_OK)
 
     @action(detail=True, methods=['post'])
     def restore(self, request, pk=None):
         obj = self.get_object()
         user = request.user
         obj.restore(user)
-        return Response(status=status.HTTP_200_OK)
+
+        data = self.serializer_class(obj).data
+        return Response({'book': data}, status=status.HTTP_200_OK)
 
     @action(detail=True, methods=['post'])
     def like(self, request, pk=None):
@@ -71,7 +75,9 @@ class BookViewSet(viewsets.ModelViewSet):
 
         obj, _ = Like.objects.get_or_create(user=user, book=book)
         obj.like()
-        return Response({'book_status': 'liked'}, status=status.HTTP_200_OK)
+
+        data = self.serializer_class(book).data
+        return Response({'book': data, 'book_status': 'liked'}, status=status.HTTP_200_OK)
 
     @action(detail=True, methods=['post'])
     def dislike(self, request, pk=None):
@@ -80,7 +86,9 @@ class BookViewSet(viewsets.ModelViewSet):
 
         obj, _ = Like.objects.get_or_create(user=user, book=book)
         obj.dislike()
-        return Response({'book_status': 'disliked'}, status=status.HTTP_200_OK)
+
+        data = self.serializer_class(book).data
+        return Response({'book': data, 'book_status': 'disliked'}, status=status.HTTP_200_OK)
 
     @action(detail=True, methods=['post'])
     def deactivate(self, request, pk=None):
@@ -89,7 +97,9 @@ class BookViewSet(viewsets.ModelViewSet):
 
         obj, _ = Like.objects.get_or_create(user=user, book=book)
         obj.deactivate()
-        return Response({'book_status': 'deactivate'}, status=status.HTTP_200_OK)
+
+        data = self.serializer_class(book).data
+        return Response({'book': data, 'book_status': 'deactivate'}, status=status.HTTP_200_OK)
 
     @action(detail=True, methods=['post'])
     def favour(self, request, pk=None):
@@ -98,7 +108,9 @@ class BookViewSet(viewsets.ModelViewSet):
 
         obj, _ = Favourite.objects.get_or_create(user=user, book=book)
         obj.favourite()
-        return Response({'book_status': 'favourite'}, status=status.HTTP_200_OK)
+
+        data = self.serializer_class(book).data
+        return Response({'book': data, 'book_status': 'favourite'}, status=status.HTTP_200_OK)
 
     @action(detail=True, methods=['post'])
     def unfavour(self, request, pk=None):
@@ -107,4 +119,6 @@ class BookViewSet(viewsets.ModelViewSet):
 
         obj, _ = Favourite.objects.get_or_create(user=user, book=book)
         obj.unfavourite()
-        return Response({'book_status': 'not_favourite'}, status=status.HTTP_200_OK)
+
+        data = self.serializer_class(book).data
+        return Response({'book': data, 'book_status': 'not_favourite'}, status=status.HTTP_200_OK)

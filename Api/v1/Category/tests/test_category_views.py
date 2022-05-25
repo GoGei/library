@@ -13,7 +13,8 @@ class ApiCategoryViewTests(TestCase):
     def setUp(self):
         self.client = APIClient()
         self.category = CategoryFactory.create()
-        self.book = BookFactory.create(category=self.category)
+        self.book = BookFactory.create(category=[self.category])
+
         self.superuser = UserFactory.create(is_active=True, is_staff=True, is_superuser=True)
         self.client.force_authenticate(user=self.superuser)
 
@@ -86,15 +87,15 @@ class ApiCategoryViewTests(TestCase):
         self.assertFalse(Category.objects.all().exists())
 
     def test_category_archive(self):
-        category = CategoryFactory.create()
-        post = BookFactory.create(category=category)
-        client = APIClient()
-        client.force_authenticate(self.superuser)
-        response = client.post(reverse('api-v1:categories-archive', args=[category.id], host='api'),
-                               HTTP_HOST='api', format='json')
+        category = self.category
+        book = self.book
+
+        response = self.client.post(reverse('api-v1:categories-archive', args=[category.id], host='api'),
+                                    HTTP_HOST='api', format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
         self.assertContains(response, category.id)
-        self.assertContains(response, post.id)
+        self.assertContains(response, book.id)
 
     def test_category_restore(self):
         category = self.category

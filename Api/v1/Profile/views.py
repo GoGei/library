@@ -40,8 +40,8 @@ class ProfileViewSet(viewsets.ModelViewSet):
     def create_with_user(self, request):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
-            data = serializer.data
-            user = User.objects.create_user(email=data['email'], password=None)
+            data = serializer.validated_data
+            user = User.objects.create_user(**data)
             profile = Profile(user=user)
             profile.save()
             return Response(ProfileListSerializer(profile).data)
@@ -54,11 +54,15 @@ class ProfileViewSet(viewsets.ModelViewSet):
         obj = self.get_object()
         user = request.user
         obj.archive(user)
-        return Response(status=status.HTTP_200_OK)
+
+        data = self.serializer_class(obj).data
+        return Response({'profile': data}, status=status.HTTP_200_OK)
 
     @action(detail=True, methods=['post'])
     def restore(self, request, pk=None):
         obj = self.get_object()
         user = request.user
         obj.restore(user)
-        return Response(status=status.HTTP_200_OK)
+
+        data = self.serializer_class(obj).data
+        return Response({'profile': data}, status=status.HTTP_200_OK)
