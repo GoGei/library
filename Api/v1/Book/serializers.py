@@ -11,15 +11,15 @@ class BookSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Book
-        fields = ['id', 'name', 'category', 'author', 'publish_date']
-        read_only_fields = ['id']
+        fields = ['id', 'name', 'slug', 'category', 'author', 'publish_date']
+        read_only_fields = ['id', 'slug']
 
 
 class BookCreateUpdateSerializer(BaseCreateUpdateSerializer):
     class Meta:
         model = Book
-        fields = ['id', 'name', 'category', 'author', 'publish_date', 'description']
-        read_only_fields = ['id']
+        fields = ['id', 'slug', 'name', 'category', 'author', 'publish_date', 'description']
+        read_only_fields = ['id', 'slug']
 
     def validate(self, data):
         instance = self.instance
@@ -70,3 +70,9 @@ class BookRelatedObjectsSerializer(BaseBookSerializer):
     class Meta:
         model = Book
         fields = ['id', 'name', 'category', 'author', 'publish_date']
+
+
+class BookArchiveSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Book
+        fields = ['id', 'slug', 'name']

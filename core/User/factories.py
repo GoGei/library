@@ -17,20 +17,3 @@ class UserFactory(factory.DjangoModelFactory):
 
     class Meta:
         model = User
-        get_or_create = ('username', 'email')
-
-
-class StaffFactory(UserFactory):
-    is_staff = True
-    is_superuser = False
-
-    class Meta:
-        model = User
-
-
-class SuperuserFactory(UserFactory):
-    is_staff = True
-    is_superuser = True
-
-    class Meta:
-        model = User
