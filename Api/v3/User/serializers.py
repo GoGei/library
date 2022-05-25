@@ -18,7 +18,3 @@ class UserRetrieveSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['id', 'email', 'is_active', 'first_name', 'last_name', 'middle_name']
-
-
-class UserProfileSerializer(serializers.Serializer):
-    pass

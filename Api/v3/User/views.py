@@ -4,7 +4,7 @@ from rest_framework.response import Response
 
 from core.User.models import User
 from Api.serializers import EmptySerializer
-from Api.v3.Profile.serializers import ProfileUserSerializer, ProfileUserCreateUpdateSerializer
+from Api.v3.Profile.serializers import ProfileUserSerializer
 from .serializers import UserListSerializer, UserRetrieveSerializer, UserSerializer
 
 
@@ -15,7 +15,6 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
         'list': UserListSerializer,
         'retrieve': UserRetrieveSerializer,
         'profiles': ProfileUserSerializer,
-        'create_profile': ProfileUserCreateUpdateSerializer
     }
     empty_serializer_set = {}
 
@@ -35,19 +34,3 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
 
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
-
-    @action(detail=True, methods=['get'])
-    def profile(self, request, pk=None):
-        pass
-
-    @action(detail=True, methods=['post'])
-    def set_profile(self, request, pk=None):
-        pass
-
-    @action(detail=True, methods=['post'])
-    def expire_profile(self, request, pk=None):
-        pass
-
-    @action(detail=True, methods=['post'])
-    def ban_profile(self, request, pk=None):
-        pass

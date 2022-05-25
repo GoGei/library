@@ -17,13 +17,6 @@ class ProfileViewSerializer(serializers.ModelSerializer):
         fields = ['id', 'user', 'is_banned', 'expire_date']
 
 
-class ProfileUserCreateUpdateSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Profile
-        fields = ['id', 'user', 'expire_date']
-        read_only_fields = ['id']
-
-
 class ProfileUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
