@@ -1,7 +1,9 @@
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from rest_framework.renderers import AdminRenderer
 
+from Api.permissions import IsStaffPermission
 from core.User.models import User
 from Api.serializers import EmptySerializer
 from Api.v3.Profile.serializers import ProfileUserSerializer
@@ -9,6 +11,9 @@ from .serializers import UserListSerializer, UserRetrieveSerializer, UserSeriali
 
 
 class UserViewSet(viewsets.ReadOnlyModelViewSet):
+    permission_classes = [IsStaffPermission]
+    renderer_classes = [AdminRenderer]
+
     queryset = User.objects.prefetch_related('profile_set', 'like_set', 'favourite_set').all()
     serializer_class = UserSerializer
     serializer_map = {

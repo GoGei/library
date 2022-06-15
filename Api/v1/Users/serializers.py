@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from core.User.models import User
+from core.Profile.models import Profile
 from core.Utils.validators import PasswordValidator
-from Api.serializers import BaseCreateUpdateSerializer
 
 
 class UserListSerializer(serializers.ModelSerializer):
@@ -10,7 +10,7 @@ class UserListSerializer(serializers.ModelSerializer):
         exclude = ['password']
 
 
-class UserCreateUpdateSerializer(BaseCreateUpdateSerializer):
+class UserCreateUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['id', 'email', 'is_active', 'is_staff', 'is_superuser', 'first_name', 'last_name', 'middle_name']
@@ -47,3 +47,15 @@ class UserCrmSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['id', 'email']
+
+
+class UserArchiveSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'email', 'is_staff', 'is_superuser', 'first_name', 'last_name', 'middle_name']
+
+
+class UserProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Profile
+        fields = ['id', 'is_banned', 'expire_date']

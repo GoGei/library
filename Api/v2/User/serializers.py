@@ -21,7 +21,7 @@ class ProfileSerializer(serializers.Serializer):
     middle_name = serializers.CharField()
     liked = BookProfileSerializer(many=True)
     favourite = BookProfileSerializer(many=True)
-    is_banned = serializers.BooleanField(source='profile.is_banned')
+    is_banned = serializers.NullBooleanField(source='profile.is_banned')
 
     class Meta:
         fields = ['id', 'email', 'is_banned', 'first_name', 'last_name', 'middle_name', 'liked', 'favourite']

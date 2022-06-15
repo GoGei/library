@@ -36,6 +36,18 @@ class AuthorViewSet(viewsets.ModelViewSet):
             return EmptySerializer
         return self.serializer_map.get(self.action, self.serializer_class)
 
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+
+        books = instance.book_set.all()
+        if books.exists():
+            id_lst = [str(e) for e in books.values_list('id', flat=True).distinct()]
+            return Response({'model_protect_restriction': 'To this author bound books! (%s)' % ','.join(id_lst)},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+        self.perform_destroy(instance)
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
     @action(detail=True, methods=['post'])
     def archive(self, request, pk=None):
         obj = self.get_object()

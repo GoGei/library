@@ -74,14 +74,14 @@ class ApiLikeViewTests(TestCase):
         user = UserFactory.create(is_active=True, is_staff=False, is_superuser=False)
         client = APIClient()
         client.force_authenticate(user=user)
-        response = client.post(reverse('api-v1:like-list', host='api'),
-                               HTTP_HOST='api', format='json', data=self.like_data)
+        response = client.get(reverse('api-v1:like-list', host='api'),
+                              HTTP_HOST='api', format='json')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_like_staff_forbidden(self):
         user = UserFactory.create(is_active=True, is_staff=True, is_superuser=False)
         client = APIClient()
         client.force_authenticate(user=user)
-        response = client.post(reverse('api-v1:like-list', host='api'),
-                               HTTP_HOST='api', format='json', data=self.like_data)
+        response = client.get(reverse('api-v1:like-list', host='api'),
+                              HTTP_HOST='api', format='json')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)

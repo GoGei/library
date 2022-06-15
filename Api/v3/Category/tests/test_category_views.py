@@ -26,7 +26,7 @@ class ApiCategoryViewTests(TestCase):
         }
 
     def test_category_list(self):
-        response = self.client.get(reverse('api-v1:categories-list', host='api'),
+        response = self.client.get(reverse('api-v3:categories-list', host='api'),
                                    HTTP_HOST='api', format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
@@ -36,7 +36,7 @@ class ApiCategoryViewTests(TestCase):
 
     def test_category_create_success(self):
         data = self.category_data.copy()
-        response = self.client.post(reverse('api-v1:categories-list', host='api'),
+        response = self.client.post(reverse('api-v3:categories-list', host='api'),
                                     HTTP_HOST='api', format='json', data=data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
@@ -47,9 +47,9 @@ class ApiCategoryViewTests(TestCase):
 
     def test_category_create_name_error(self):
         data = self.category_data.copy()
-        self.client.post(reverse('api-v1:categories-list', host='api'),
+        self.client.post(reverse('api-v3:categories-list', host='api'),
                          HTTP_HOST='api', format='json', data=data)
-        response = self.client.post(reverse('api-v1:categories-list', host='api'),
+        response = self.client.post(reverse('api-v3:categories-list', host='api'),
                                     HTTP_HOST='api', format='json', data=data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         result = response.data
@@ -57,7 +57,7 @@ class ApiCategoryViewTests(TestCase):
 
     def test_category_update_success(self):
         data = self.category_new_data.copy()
-        response = self.client.put(reverse('api-v1:categories-detail', args=[self.category.id], host='api'),
+        response = self.client.put(reverse('api-v3:categories-detail', args=[self.category.id], host='api'),
                                    HTTP_HOST='api', format='json', data=data)
         result = response.data
         self.assertTrue(Category.objects.filter(slug=result['slug']))
@@ -66,8 +66,8 @@ class ApiCategoryViewTests(TestCase):
 
     def test_category_update_name_error(self):
         data = self.category_data.copy()
-        self.client.post(reverse('api-v1:categories-list', host='api'), HTTP_HOST='api', format='json', data=data)
-        response = self.client.put(reverse('api-v1:categories-detail', args=[self.category.id], host='api'),
+        self.client.post(reverse('api-v3:categories-list', host='api'), HTTP_HOST='api', format='json', data=data)
+        response = self.client.put(reverse('api-v3:categories-detail', args=[self.category.id], host='api'),
                                    HTTP_HOST='api', format='json', data=data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
@@ -75,51 +75,31 @@ class ApiCategoryViewTests(TestCase):
         self.assertIn('name', result)
 
     def test_category_retrieve_success(self):
-        response = self.client.get(reverse('api-v1:categories-detail', args=[self.category.id], host='api'),
+        response = self.client.get(reverse('api-v3:categories-detail', args=[self.category.id], host='api'),
                                    HTTP_HOST='api', format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertContains(response, self.category.id)
 
     def test_category_delete_success(self):
-        response = self.client.delete(reverse('api-v1:categories-detail', args=[self.category.id], host='api'),
+        response = self.client.delete(reverse('api-v3:categories-detail', args=[self.category.id], host='api'),
                                       HTTP_HOST='api', format='json')
-        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(response.status_code, status.HTTP_303_SEE_OTHER)
         self.assertFalse(Category.objects.all().exists())
 
     def test_category_archive(self):
-        category = self.category
-        book = self.book
-
-        response = self.client.post(reverse('api-v1:categories-archive', args=[category.id], host='api'),
+        response = self.client.post(reverse('api-v3:categories-archive', args=[self.category.id], host='api'),
                                     HTTP_HOST='api', format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-        self.assertContains(response, category.id)
-        self.assertContains(response, book.id)
 
     def test_category_restore(self):
-        category = self.category
-        book = self.book
-
-        response = self.client.post(reverse('api-v1:categories-restore', args=[category.id], host='api'),
+        response = self.client.post(reverse('api-v3:categories-restore', args=[self.category.id], host='api'),
                                     HTTP_HOST='api', format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-        self.assertContains(response, category.id)
-        self.assertContains(response, book.id)
 
     def test_category_user_forbidden(self):
         user = UserFactory.create(is_active=True, is_staff=False, is_superuser=False)
         client = APIClient()
         client.force_authenticate(user=user)
-        response = client.get(reverse('api-v1:categories-list', host='api'),
-                              HTTP_HOST='api', format='json')
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-
-    def test_category_staff_forbidden(self):
-        user = UserFactory.create(is_active=True, is_staff=True, is_superuser=False)
-        client = APIClient()
-        client.force_authenticate(user=user)
-        response = client.get(reverse('api-v1:categories-list', host='api'),
+        response = client.get(reverse('api-v3:categories-list', host='api'),
                               HTTP_HOST='api', format='json')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)

@@ -14,6 +14,6 @@ router.register(r'categories', CategoryViewSet, basename='categories')
 router.register(r'favourite', FavouriteViewSet, basename='favourite')
 router.register(r'like', LikeViewSet, basename='like')
 router.register(r'users', UserViewSet, basename='users')
-router.register(r'profile', ProfileViewSet, basename='profile')
+router.register(r'profiles', ProfileViewSet, basename='profiles')
 
 urlpatterns = router.urls

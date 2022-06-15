@@ -20,7 +20,7 @@ class ProfileListSerializer(serializers.ModelSerializer):
 class ProfileSerializer(BaseCreateUpdateSerializer):
     class Meta:
         model = Profile
-        fields = ['id', 'user']
+        fields = ['id', 'user', 'is_banned', 'expire_date']
         read_only_fields = ['id']
 
 
@@ -29,7 +29,7 @@ class ProfileDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Profile
-        fields = ['id', 'user']
+        fields = '__all__'
 
 
 class ProfileCreateWithUser(serializers.Serializer):
@@ -63,3 +63,9 @@ class ProfileCreateWithUser(serializers.Serializer):
         excluded_fields = ['disable_complex_password', 'repeat_password']
         [data.pop(key) for key in excluded_fields]
         return data
+
+
+class ProfileArchiveSerializer(BaseCreateUpdateSerializer):
+    class Meta:
+        model = Profile
+        fields = ['id', 'is_banned', 'expire_date']

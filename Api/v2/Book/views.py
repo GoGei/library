@@ -37,7 +37,9 @@ class BookViewSet(viewsets.ReadOnlyModelViewSet):
 
         obj, _ = Like.objects.get_or_create(user=user, book=book)
         obj.like()
-        return Response({'book_status': 'liked'}, status=status.HTTP_200_OK)
+
+        data = self.serializer_class(book).data
+        return Response({'book': data, 'book_status': 'liked'}, status=status.HTTP_200_OK)
 
     @action(detail=True, methods=['post'], permission_classes=[permissions.IsAuthenticated])
     def dislike(self, request, pk=None):
@@ -46,7 +48,9 @@ class BookViewSet(viewsets.ReadOnlyModelViewSet):
 
         obj, _ = Like.objects.get_or_create(user=user, book=book)
         obj.dislike()
-        return Response({'book_status': 'disliked'}, status=status.HTTP_200_OK)
+
+        data = self.serializer_class(book).data
+        return Response({'book': data, 'book_status': 'disliked'}, status=status.HTTP_200_OK)
 
     @action(detail=True, methods=['post'], permission_classes=[permissions.IsAuthenticated])
     def deactivate(self, request, pk=None):
@@ -55,7 +59,9 @@ class BookViewSet(viewsets.ReadOnlyModelViewSet):
 
         obj, _ = Like.objects.get_or_create(user=user, book=book)
         obj.deactivate()
-        return Response({'book_status': 'deactivate'}, status=status.HTTP_200_OK)
+
+        data = self.serializer_class(book).data
+        return Response({'book': data, 'book_status': 'deactivate'}, status=status.HTTP_200_OK)
 
     @action(detail=True, methods=['post'], permission_classes=[permissions.IsAuthenticated])
     def favour(self, request, pk=None):
@@ -64,7 +70,9 @@ class BookViewSet(viewsets.ReadOnlyModelViewSet):
 
         obj, _ = Favourite.objects.get_or_create(user=user, book=book)
         obj.favourite()
-        return Response({'book_status': 'favourite'}, status=status.HTTP_200_OK)
+
+        data = self.serializer_class(book).data
+        return Response({'book': data, 'book_status': 'favourite'}, status=status.HTTP_200_OK)
 
     @action(detail=True, methods=['post'], permission_classes=[permissions.IsAuthenticated])
     def unfavour(self, request, pk=None):
@@ -73,4 +81,6 @@ class BookViewSet(viewsets.ReadOnlyModelViewSet):
 
         obj, _ = Favourite.objects.get_or_create(user=user, book=book)
         obj.unfavourite()
-        return Response({'book_status': 'not_favourite'}, status=status.HTTP_200_OK)
+
+        data = self.serializer_class(book).data
+        return Response({'book': data, 'book_status': 'not_favourite'}, status=status.HTTP_200_OK)

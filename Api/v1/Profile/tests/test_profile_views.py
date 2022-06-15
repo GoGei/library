@@ -21,12 +21,9 @@ class ApiProfileViewTests(TestCase):
         self.profile_data = {
             'user': user.id,
         }
-        self.user_data = {
-
-        }
 
     def test_profile_list(self):
-        response = self.client.get(reverse('api-v1:profile-list', host='api'),
+        response = self.client.get(reverse('api-v1:profiles-list', host='api'),
                                    HTTP_HOST='api', format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
@@ -36,7 +33,7 @@ class ApiProfileViewTests(TestCase):
 
     def test_profile_create_success(self):
         data = self.profile_data.copy()
-        response = self.client.post(reverse('api-v1:profile-list', host='api'),
+        response = self.client.post(reverse('api-v1:profiles-list', host='api'),
                                     HTTP_HOST='api', format='json', data=data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
@@ -46,20 +43,20 @@ class ApiProfileViewTests(TestCase):
 
     def test_profile_update_success(self):
         data = self.profile_data.copy()
-        response = self.client.put(reverse('api-v1:profile-detail', args=[self.profile.id], host='api'),
+        response = self.client.put(reverse('api-v1:profiles-detail', args=[self.profile.id], host='api'),
                                    HTTP_HOST='api', format='json', data=data)
         result = response.data
         for key in data.keys():
             self.assertEqual(data[key], result[key])
 
     def test_profile_retrieve_success(self):
-        response = self.client.get(reverse('api-v1:profile-detail', args=[self.profile.id], host='api'),
+        response = self.client.get(reverse('api-v1:profiles-detail', args=[self.profile.id], host='api'),
                                    HTTP_HOST='api', format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertContains(response, self.profile.id)
 
     def test_profile_delete_success(self):
-        response = self.client.delete(reverse('api-v1:profile-detail', args=[self.profile.id], host='api'),
+        response = self.client.delete(reverse('api-v1:profiles-detail', args=[self.profile.id], host='api'),
                                       HTTP_HOST='api', format='json')
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertFalse(Profile.objects.all().exists())
@@ -68,7 +65,7 @@ class ApiProfileViewTests(TestCase):
         profile = self.profile
         user = self.profile.user
 
-        response = self.client.post(reverse('api-v1:profile-archive', args=[profile.id], host='api'),
+        response = self.client.post(reverse('api-v1:profiles-archive', args=[profile.id], host='api'),
                                     HTTP_HOST='api', format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
@@ -79,7 +76,7 @@ class ApiProfileViewTests(TestCase):
         profile = self.profile
         user = self.profile.user
 
-        response = self.client.post(reverse('api-v1:profile-restore', args=[profile.id], host='api'),
+        response = self.client.post(reverse('api-v1:profiles-restore', args=[profile.id], host='api'),
                                     HTTP_HOST='api', format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
@@ -90,14 +87,14 @@ class ApiProfileViewTests(TestCase):
         user = UserFactory.create(is_active=True, is_staff=False, is_superuser=False)
         client = APIClient()
         client.force_authenticate(user=user)
-        response = client.post(reverse('api-v1:profile-list', host='api'),
-                               HTTP_HOST='api', format='json', data=self.profile_data)
+        response = client.get(reverse('api-v1:profiles-list', host='api'),
+                              HTTP_HOST='api', format='json')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_profile_staff_forbidden(self):
         user = UserFactory.create(is_active=True, is_staff=True, is_superuser=False)
         client = APIClient()
         client.force_authenticate(user=user)
-        response = client.post(reverse('api-v1:profile-list', host='api'),
-                               HTTP_HOST='api', format='json', data=self.profile_data)
+        response = client.get(reverse('api-v1:profiles-list', host='api'),
+                              HTTP_HOST='api', format='json')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)

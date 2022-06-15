@@ -2,10 +2,12 @@ from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
+from Api.v1.Profile.serializers import ProfileArchiveSerializer
 from Api.permissions import IsSuperuserPermission
 from Api.serializers import EmptySerializer
 from core.User.models import User
-from .serializers import UserSerializer, UserListSerializer, UserCreateUpdateSerializer, UserSetPasswordSerializer
+from .serializers import UserSerializer, UserListSerializer, UserCreateUpdateSerializer, UserSetPasswordSerializer, \
+    UserArchiveSerializer, UserProfileSerializer
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -18,7 +20,11 @@ class UserViewSet(viewsets.ModelViewSet):
         'create': UserCreateUpdateSerializer,
         'update': UserCreateUpdateSerializer,
         'set_password': UserSetPasswordSerializer,
+        'profiles': UserProfileSerializer
     }
+    user_archive_serializer = UserArchiveSerializer
+    profile_archive_serializer = ProfileArchiveSerializer
+
     empty_serializer_set = {'archive', 'restore'}
     ordering_fields = ['email']
     search_fields = ['email']
@@ -33,21 +39,27 @@ class UserViewSet(viewsets.ModelViewSet):
     def archive(self, request, pk=None):
         obj = self.get_object()
         user = request.user
-        obj.archive(user)
+        obj.archive()
 
         profiles = obj.profile_set.all()
         profiles.archive(user)
-        return Response(status=status.HTTP_200_OK)
+
+        user_data = self.user_archive_serializer(obj).data
+        profile_data = self.profile_archive_serializer(profiles, many=True).data
+        return Response({'user': user_data, 'profiles': profile_data}, status=status.HTTP_200_OK)
 
     @action(detail=True, methods=['post'])
     def restore(self, request, pk=None):
         obj = self.get_object()
         user = request.user
-        obj.restore(user)
+        obj.restore()
 
         profiles = obj.profile_set.all()
         profiles.restore(user)
-        return Response(status=status.HTTP_200_OK)
+
+        user_data = self.user_archive_serializer(obj).data
+        profile_data = self.profile_archive_serializer(profiles, many=True).data
+        return Response({'user': user_data, 'profiles': profile_data}, status=status.HTTP_200_OK)
 
     @action(detail=True, methods=['post'], url_path='set-password')
     def set_password(self, request, pk=None):
